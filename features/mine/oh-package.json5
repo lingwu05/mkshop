@@ -6,6 +6,6 @@
   "author": "",
   "license": "Apache-2.0",
   "packageType": "InterfaceHar",
-  "dependencies": {
+  "dependencies": {"libmine.so": "file:./src/main/cpp/types/libmine"
   }
 }
