@@ -1,0 +1,115 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\lingwu\\.ohos\\config\\default_mkshop_U1pU6cWTgXVcnN5ACA81DIQKlNYWk_fIWn1ASSBwHvg=.cer",
+          "storePassword": "0000001B98AD1DAB909DCA22A724EFF0FB54C7E061EFF418B92C6C7EF3EA64BE465854A273FFA559099CFC",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001BBDD3FA13C887B32002BE25EC607488C494EEC02A6C33538024EE8A8045D13A9B5093D40F3B7A56",
+          "profile": "C:\\Users\\lingwu\\.ohos\\config\\default_mkshop_U1pU6cWTgXVcnN5ACA81DIQKlNYWk_fIWn1ASSBwHvg=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\lingwu\\.ohos\\config\\default_mkshop_U1pU6cWTgXVcnN5ACA81DIQKlNYWk_fIWn1ASSBwHvg=.p12"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "compatibleSdkVersion": "5.0.0(12)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "phone",
+      "srcPath": "./products/phone",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "basic",
+      "srcPath": "./commons/basic",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "home",
+      "srcPath": "./features/home",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cart",
+      "srcPath": "./features/cart",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "category",
+      "srcPath": "./features/category",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mine",
+      "srcPath": "./features/mine",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}
