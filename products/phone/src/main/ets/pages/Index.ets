@@ -1,4 +1,4 @@
-import { TabItem } from 'basic';
+import { Logger, TabItem } from 'basic';
 import { CartView } from 'cart';
 import { CategoryView } from 'category';
 import { HomeView } from 'home';
@@ -25,6 +25,12 @@ struct Index {
         .fontColor($r('app.color.black'))
         .lineHeight(14)
     }
+  }
+
+  aboutToAppear(): void {
+    Logger.info("正常打印")
+    Logger.error("错误啦")
+    Logger.warn("警告啦")
   }
 
   build() {
