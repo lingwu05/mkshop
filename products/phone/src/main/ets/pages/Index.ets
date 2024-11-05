@@ -1,4 +1,5 @@
-import { Logger, TabItem } from 'basic';
+import { BreakPointType, Logger, TabItem } from 'basic';
+import { GlobalVariable } from 'basic/src/main/ets/constants/Index';
 import { CartView } from 'cart';
 import { CategoryView } from 'category';
 import { HomeView } from 'home';
@@ -8,6 +9,7 @@ import { MineView } from 'mine';
 @Component
 struct Index {
   @State activeIndex: number = 0
+  @StorageProp(GlobalVariable.BREAK_POINT_KEY) breakPoint: string = ''
   tabList: TabItem[] = [
     { text: '首页', normal: $r('app.media.ic_public_home_normal'), active: $r('app.media.ic_public_home_active') },
     { text: '分类', normal: $r('app.media.ic_public_pro_normal'), active: $r('app.media.ic_public_pro_active') },
@@ -22,7 +24,7 @@ struct Index {
         .aspectRatio(1)
       Text(item.text)
         .fontSize(11)
-        .fontColor($r('app.color.black'))
+        .fontColor($r('[basic].color.black'))
         .lineHeight(14)
     }
   }
@@ -34,7 +36,12 @@ struct Index {
   }
 
   build() {
-    Tabs({barPosition: BarPosition.End}) {
+    Tabs({barPosition: new BreakPointType({
+      xs: BarPosition.End,
+      sm: BarPosition.End,
+      md: BarPosition.End,
+      lg: BarPosition.Start
+    }).getValue(this.breakPoint)}) {
       ForEach(this.tabList, (item:TabItem, index) => {
         TabContent() {
           if (index === 0) {
@@ -53,6 +60,12 @@ struct Index {
     .onTabBarClick((index) => {
       this.activeIndex = index
     })
+    .vertical(new BreakPointType({
+      xs: false,
+      sm: false,
+      md: false,
+      lg: true
+    }).getValue(this.breakPoint))
     .height('100%')
     .width('100%')
   }
