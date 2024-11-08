@@ -19,6 +19,7 @@ export struct HomeView {
 
   @State searchOpacity: number = 0
   @State yOffset: number = 0
+  scroller: Scroller = new Scroller()
 
   aboutToAppear(): void {
     this.getHomeData()
@@ -171,7 +172,7 @@ export struct HomeView {
 
   build() {
     RelativeContainer() {
-      Scroll() {
+      Scroll(this.scroller) {
         Column() {
           // 轮播图
           Swiper() {
@@ -470,6 +471,34 @@ export struct HomeView {
           direction: GradientDirection.Bottom,
           colors: [["#ffdebfee", 0], [$r("[basic].color.white"), 1]]
         })
+
+      // 点击置顶小火箭
+      Column() {
+        Image($r('app.media.home_top'))
+          .width(30)
+          .aspectRatio(1)
+          .fillColor("#0095d3")
+      }
+      .justifyContent(FlexAlign.Center)
+      .visibility(this.searchOpacity == 1 ? Visibility.Visible : Visibility.None)
+      .width(50)
+      .aspectRatio(1)
+      .borderRadius(25)
+      .backgroundColor("#fff8f9fa")
+      .alignRules({
+        right: {
+          anchor: '__container__',
+          align: HorizontalAlign.End
+        },
+        bottom: {
+          anchor: '__container__',
+          align: VerticalAlign.Bottom
+        }
+      })
+      .margin({right: 20, bottom: 20})
+      .onClick(() => {
+        this.scroller.scrollEdge(Edge.Top)
+      })
     }
     .width('100%')
     .height('100%')
