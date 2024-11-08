@@ -4,7 +4,7 @@ import { promptAction } from '@kit.ArkUI';
 
 const instance = axios.create({
   baseURL: GlobalVariable .BASE_URL, // 请求地址
-  timeout: 2000 // 超时请求时长 单位 ms
+  timeout: 10000 // 超时请求时长 单位 ms
 })
 
 // 添加请求拦截器

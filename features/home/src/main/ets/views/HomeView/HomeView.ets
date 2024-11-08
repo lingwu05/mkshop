@@ -23,13 +23,36 @@ export struct HomeView {
 
   // 获取数据
   async getHomeData() {
-    this.bannerList = await HomeHttpApi.getBannerData()
-    this.categoryList = await HomeHttpApi.getCategoryData()
-    this.saleGoodsList = (await HomeHttpApi.getSpecialData()).subTypes[0]?.goodsItems?.items
-    this.hotGoodsList = (await HomeHttpApi.getHotData()).subTypes[0]?.goodsItems?.items
-    this.oneGoodsList = (await HomeHttpApi.getOneData()).subTypes[0]?.goodsItems?.items
-    this.freshGoodsList = await HomeHttpApi.getFreshData()
-    this.recomGoodsList = await HomeHttpApi.getRecomData({limit: 20} as RecomQueryParam)
+    const result = await Promise.allSettled([
+      HomeHttpApi.getBannerData(),
+      HomeHttpApi.getCategoryData(),
+      HomeHttpApi.getSpecialData(),
+      HomeHttpApi.getHotData(),
+      HomeHttpApi.getOneData(),
+      HomeHttpApi.getFreshData(),
+      HomeHttpApi.getRecomData({limit: 20} as RecomQueryParam)
+    ])
+    if (result[0].status === "fulfilled") {
+      this.bannerList = result[0].value
+    }
+    if (result[1].status === "fulfilled") {
+      this.categoryList = result[1].value
+    }
+    if (result[2].status === "fulfilled") {
+      this.saleGoodsList = result[2].value.subTypes[0]?.goodsItems?.items
+    }
+    if (result[3].status === "fulfilled") {
+      this.hotGoodsList = result[3].value.subTypes[0]?.goodsItems?.items
+    }
+    if (result[4].status === "fulfilled") {
+      this.oneGoodsList = result[4].value.subTypes[0]?.goodsItems?.items
+    }
+    if (result[5].status === "fulfilled") {
+      this.freshGoodsList = result[5].value
+    }
+    if (result[6].status === "fulfilled") {
+      this.recomGoodsList = result[6].value
+    }
   }
 
   @Builder discountBuilder(param: DiscountBuilderParam) {
