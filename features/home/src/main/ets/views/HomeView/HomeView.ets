@@ -29,10 +29,10 @@ export struct HomeView {
   @State isLoading: boolean = false
   scroller: Scroller = new Scroller()
 
-  aboutToAppear(): void {
+  async aboutToAppear() {
     this.isLoading = true
-    this.getHomeData()
-    this.getRecomData()
+    await this.getHomeData()
+    await this.getRecomData()
     this.isLoading = false
   }
 
@@ -200,7 +200,7 @@ export struct HomeView {
 
   build() {
     if (this.isLoading) {
-      Loading()
+      LoadingText()
     } else {
       RelativeContainer() {
         Refresh({refreshing: $$this.isRefreshing, builder: this.refreshStyleBuilder()}) {
