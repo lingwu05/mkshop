@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from '@ohos/axios'
 import { GlobalVariable } from '../constants/Index'
+import { promptAction } from '@kit.ArkUI';
 
 const instance = axios.create({
   baseURL: GlobalVariable .BASE_URL, // 请求地址
@@ -17,8 +18,12 @@ instance.interceptors.request.use((config:InternalAxiosRequestConfig) => {
 
 // 添加响应拦截器
 instance.interceptors.response.use((response:AxiosResponse)=> {
-  // 对响应数据做点什么
-  return response.data;
+  // 如果响应成功,返回数据
+  if (response.data.code == GlobalVariable.SUCCESS_CODE) {
+    return response.data.result;
+  }
+  promptAction.showToast({ message: response.data.msg }) // 提示错误消息
+  return Promise.reject(new Error(response.data.msg))
 }, (error:AxiosError)=> {
   // 对响应错误做点什么
   return Promise.reject(error);

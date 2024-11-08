@@ -1,7 +1,7 @@
-import { it } from "@ohos/hypium"
-import { BreakPointEnum, BreakPointType } from "basic"
+import { BreakPointEnum, BreakPointType, HttpRequest } from "basic"
 import { SearchBox } from "basic/src/main/ets/components/Index"
 import { GlobalVariable } from "basic/src/main/ets/constants/GlobalVariable"
+import { HomeHttpApi } from "../../api/Index"
 import { BannerItem, CategoryItem, DiscountBuilderParam, GoodsItem } from "../../models/Index"
 
 @Component
@@ -25,11 +25,11 @@ export struct HomeView {
     this.bannerList = new Array(6).fill({
       img: 'https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meikou/banner/nuandong_sj.png'
     } as BannerItem)
-    this.categoryList = new Array(8).fill({
-      img: 'https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meikou/c1/qznz.png',
-      name: '气质女装',
-      bgc: '#f9f6f0'
-    } as CategoryItem)
+    // this.categoryList = new Array(8).fill({
+    //   img: 'https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meikou/c1/qznz.png',
+    //   name: '气质女装',
+    //   bgc: '#f9f6f0'
+    // } as CategoryItem)
     this.saleGoodsList = new Array(10).fill({
       "name": "剪出精致感，金致圆柄复古剪刀",
       "desc": "轻薄设计，简约大方",
@@ -61,6 +61,11 @@ export struct HomeView {
     })
   }
 
+  // 获取真实的数据
+  async getRealData() {
+    this.bannerList = await HomeHttpApi.getBannerData()
+  }
+
   @Builder discountBuilder(param: DiscountBuilderParam) {
     Column({space: 8}) {
       Row({space: 10}) {
@@ -80,7 +85,7 @@ export struct HomeView {
         ForEach(param.list, (item: GoodsItem) => {
           ListItem() {
             Column() {
-              Image(item.img)
+              Image(item.picture)
                 .width(55)
                 .aspectRatio(1)
                 .margin({bottom: 8})
@@ -128,7 +133,7 @@ export struct HomeView {
   @Builder
   cardGoodsBuilder(item: GoodsItem) {
     Column() {
-      Image(item.img)
+      Image(item.picture)
         .width('100%')
         .aspectRatio(1)
 
@@ -241,7 +246,7 @@ export struct HomeView {
               ForEach(this.categoryList, (item: CategoryItem) => {
                 ListItem() {
                   Column() {
-                    Image(item.img)
+                    Image(item.picture)
                       .width(56)
                       .aspectRatio(1)
                     Text(item.name)
@@ -253,7 +258,7 @@ export struct HomeView {
                   .width(60)
                   .height(80)
                   .borderRadius(30)
-                  .backgroundImage(item.img)
+                  .backgroundImage(item.picture)
                   .backgroundImageSize(ImageSize.Contain)
                   .backgroundImagePosition(Alignment.Center)
                   .backgroundBlurStyle(
@@ -296,7 +301,7 @@ export struct HomeView {
                     ForEach(this.saleGoodsList, (item: GoodsItem) => {
                       ListItem() {
                         Column({space: 10}) {
-                          Image(item.img)
+                          Image(item.picture)
                             .width(70)
                             .aspectRatio(1)
                           Text('￥' + item.price)
@@ -380,7 +385,7 @@ export struct HomeView {
                   ForEach(this.freshGoodsList, (item: GoodsItem) => {
                     ListItem() {
                       Column({space:10}) {
-                        Image(item.img)
+                        Image(item.picture)
                           .width(60)
                           .aspectRatio(1)
                         Text('￥ ' + item.price)
