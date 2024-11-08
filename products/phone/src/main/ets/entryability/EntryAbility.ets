@@ -1,7 +1,7 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
-import { screenManagerByMedia } from 'basic';
+import { screenManager, screenManagerByMedia } from 'basic';
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
@@ -22,6 +22,7 @@ export default class EntryAbility extends UIAbility {
         return;
       }
       screenManagerByMedia.registerListenerScreen()
+      screenManager.full(this.context)
       hilog.info(0x0000, 'testTag', 'Succeeded in loading the content.');
     });
   }
@@ -30,6 +31,7 @@ export default class EntryAbility extends UIAbility {
     // Main window is destroyed, release UI related resources
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageDestroy');
     screenManagerByMedia.unregisterListenerScreen()
+    screenManager.exitFull(this.context)
   }
 
   onForeground(): void {

@@ -6,6 +6,7 @@ import { BannerItem, CategoryItem, DiscountBuilderParam, GoodsItem } from "../..
 
 @Component
 export struct HomeView {
+  @StorageProp(GlobalVariable.SAFE_AREA_TOP) topHeight: number = 0
   @StorageProp(GlobalVariable.BREAK_POINT_KEY) breakPoint: string = ''
   @State bannerList: BannerItem[] = []
   @State categoryList: CategoryItem[] = []
@@ -454,9 +455,9 @@ export struct HomeView {
       .align(Alignment.Top)
       .scrollBar(BarState.Off)
 
-
       // 置顶搜索栏
       SearchBox()
+        .padding({top: this.topHeight})
     }
     .width('100%')
     .height('100%')
