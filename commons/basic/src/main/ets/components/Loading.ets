@@ -14,6 +14,5 @@ export struct Loading {
       .iterations(-1)
       .width(this.loadingWidth)
       .aspectRatio(3)
-
   }
 }
