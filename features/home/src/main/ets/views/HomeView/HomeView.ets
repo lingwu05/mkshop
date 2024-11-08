@@ -2,7 +2,8 @@ import { BreakPointEnum, BreakPointType, HttpRequest } from "basic"
 import { SearchBox } from "basic/src/main/ets/components/Index"
 import { GlobalVariable } from "basic/src/main/ets/constants/GlobalVariable"
 import { HomeHttpApi } from "../../api/Index"
-import { BannerItem, CategoryItem, DiscountBuilderParam, GoodsItem } from "../../models/Index"
+import { BannerItem, CategoryItem, DiscountBuilderParam, GoodsItem, RecomGoodsItem,
+  RecomQueryParam } from "../../models/Index"
 
 @Component
 export struct HomeView {
@@ -11,59 +12,24 @@ export struct HomeView {
   @State bannerList: BannerItem[] = []
   @State categoryList: CategoryItem[] = []
   @State saleGoodsList: GoodsItem[] = []
-  @State hitGoodsList: GoodsItem[] = [] // 爆款推荐下的商品列表
+  @State hotGoodsList: GoodsItem[] = [] // 爆款推荐下的商品列表
   @State oneGoodsList: GoodsItem[] = [] // 一站买全下的商品列表
   @State freshGoodsList: GoodsItem[] = [] // 新鲜好物商品列表
-  @State recomGoodsList: GoodsItem[] = [] // 推荐商品列表
+  @State recomGoodsList: RecomGoodsItem[] = [] // 推荐商品列表
 
   aboutToAppear(): void {
-    this.mockData()
+    this.getHomeData()
   }
 
-  // 模拟数据
-  mockData() {
-    this.bannerList = new Array(6).fill({
-      img: 'https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meikou/banner/nuandong_sj.png'
-    } as BannerItem)
-    // this.categoryList = new Array(8).fill({
-    //   img: 'https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meikou/c1/qznz.png',
-    //   name: '气质女装',
-    //   bgc: '#f9f6f0'
-    // } as CategoryItem)
-    this.saleGoodsList = new Array(10).fill({
-      "name": "剪出精致感，金致圆柄复古剪刀",
-      "desc": "轻薄设计，简约大方",
-      "price": "9.90",
-      "img": "https://yanxuan-item.nosdn.127.net/4c6a9c8a579b00e5e9c7b002d15a33a2.jpg",
-    })
-    this.hitGoodsList = new Array(10).fill({
-      "name": "手工八年老陈醋500毫升",
-      "desc": "地道醇香，醋酸浓郁",
-      "price": "30.00",
-      "img": "https://yanxuan-item.nosdn.127.net/77da20e77b02830a26f931901ac1a9e0.png",
-    })
-    this.oneGoodsList = new Array(10).fill({
-      "name": "免浸泡，12种谷物一次同享，五谷米400克",
-      "desc": "无需浸泡，同煮同熟",
-      "price": "9.90",
-      "img": "https://yanxuan-item.nosdn.127.net/bfe70bd66efe94f2f18061c707d2a097.png",
-    })
-    this.freshGoodsList = new Array(10).fill({
-      "name": "亮碟多效合一洗涤块495g",
-      "desc": "洗碗机专用，强力去污",
-      "price": "69.90",
-      "img": "https://yanxuan-item.nosdn.127.net/e07c2b63765cf9f4a46d489c6e09c1c1.jpg",
-    })
-    this.recomGoodsList = new Array(20).fill({
-      "name": "3秒快速拆琴轻松保养odin奥丁12半音阶口琴",
-      "price": 329,
-      "img": "https://yanxuan-item.nosdn.127.net/937a8e46a9284e8f7e00e13911ecfbe7.png",
-    })
-  }
-
-  // 获取真实的数据
-  async getRealData() {
+  // 获取数据
+  async getHomeData() {
     this.bannerList = await HomeHttpApi.getBannerData()
+    this.categoryList = await HomeHttpApi.getCategoryData()
+    this.saleGoodsList = (await HomeHttpApi.getSpecialData()).subTypes[0]?.goodsItems?.items
+    this.hotGoodsList = (await HomeHttpApi.getHotData()).subTypes[0]?.goodsItems?.items
+    this.oneGoodsList = (await HomeHttpApi.getOneData()).subTypes[0]?.goodsItems?.items
+    this.freshGoodsList = await HomeHttpApi.getFreshData()
+    this.recomGoodsList = await HomeHttpApi.getRecomData({limit: 20} as RecomQueryParam)
   }
 
   @Builder discountBuilder(param: DiscountBuilderParam) {
@@ -184,7 +150,7 @@ export struct HomeView {
           // 轮播图
           Swiper() {
             ForEach(this.bannerList, (item: BannerItem) => {
-              Image(item.img)
+              Image(item.imgUrl)
             })
           }
           .autoPlay(true)
@@ -353,7 +319,7 @@ export struct HomeView {
               this.discountBuilder({
                 mainTitle: '爆款推荐',
                 subTitle: '最受欢迎',
-                list: this.hitGoodsList,
+                list: this.hotGoodsList,
                 bgc: '#edf1fb'
               })
               this.discountBuilder({

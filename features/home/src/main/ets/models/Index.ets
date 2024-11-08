@@ -1,6 +1,6 @@
 export interface BannerItem {
-  img: string
-  href: string
+  imgUrl: string
+  hrefUrl: string
   id: string
   type: string
 }
@@ -65,6 +65,10 @@ export interface RecomGoodsItem {
   price: string
   picture: string
   payCount: number
+}
+
+export interface RecomQueryParam {
+  limit: number
 }
 
 export interface DiscountBuilderParam {
