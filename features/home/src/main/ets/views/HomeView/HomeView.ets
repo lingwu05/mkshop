@@ -17,6 +17,9 @@ export struct HomeView {
   @State freshGoodsList: GoodsItem[] = [] // 新鲜好物商品列表
   @State recomGoodsList: RecomGoodsItem[] = [] // 推荐商品列表
 
+  @State searchOpacity: number = 0
+  @State yOffset: number = 0
+
   aboutToAppear(): void {
     this.getHomeData()
   }
@@ -448,10 +451,25 @@ export struct HomeView {
       .height('100%')
       .align(Alignment.Top)
       .scrollBar(BarState.Off)
+      .onDidScroll((xOffset: number, yOffset: number, scrollState) => {
+          this.yOffset += yOffset
+          if (this.yOffset > this.topHeight && this.yOffset < (this.topHeight + 40)) {
+            this.searchOpacity = (yOffset - this.topHeight) / 40
+          } else if (this.yOffset >= this.topHeight + 40) {
+            this.searchOpacity = 1
+          } else {
+            this.searchOpacity = 0
+          }
+      })
 
       // 置顶搜索栏
       SearchBox()
-        .padding({top: this.topHeight})
+        .padding({top: this.topHeight, bottom: this.topHeight})
+        .opacity(this.searchOpacity)
+        .linearGradient({
+          direction: GradientDirection.Bottom,
+          colors: [["#ffdebfee", 0], [$r("[basic].color.white"), 1]]
+        })
     }
     .width('100%')
     .height('100%')
