@@ -2,7 +2,9 @@ import { BreakPointEnum, BreakPointType, HttpRequest } from "basic"
 import { SearchBox, LoadingText, Loading } from "basic/src/main/ets/components/Index"
 import { GlobalVariable } from "basic/src/main/ets/constants/GlobalVariable"
 import { HomeHttpApi } from "../../api/Index"
-import { BannerItem, CategoryItem, DiscountBuilderParam, GoodsItem, RecomGoodsItem,
+import { BannerItem, CategoryItem, DiscountBuilderParam, GoodsItem,
+  ListDataSource,
+  RecomGoodsItem,
   RecomQueryParam } from "../../models/Index"
 import { promptAction } from "@kit.ArkUI"
 
@@ -16,7 +18,7 @@ export struct HomeView {
   @State hotGoodsList: GoodsItem[] = [] // 爆款推荐下的商品列表
   @State oneGoodsList: GoodsItem[] = [] // 一站买全下的商品列表
   @State freshGoodsList: GoodsItem[] = [] // 新鲜好物商品列表
-  @State recomGoodsList: RecomGoodsItem[] = [] // 推荐商品列表
+  recomGoodsDataSource: ListDataSource<RecomGoodsItem> = new ListDataSource()
 
   @State isRefreshing: boolean = false // Refresh刷新
   @State page: number = 1
@@ -43,7 +45,7 @@ export struct HomeView {
       this.hasNextPage = false
       promptAction.showToast({message: '没有下一页了'})
     }
-    this.recomGoodsList = result
+    this.recomGoodsDataSource.setList(result)
   }
 
   // 获取数据
@@ -443,7 +445,7 @@ export struct HomeView {
 
                 // 推荐商品
                 WaterFlow() {
-                  ForEach(this.recomGoodsList, (item: GoodsItem) => {
+                  LazyForEach(this.recomGoodsDataSource, (item: GoodsItem) => {
                     FlowItem() {
                       this.cardGoodsBuilder(item)
                     }
