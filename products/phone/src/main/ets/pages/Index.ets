@@ -66,6 +66,18 @@ struct Index {
       md: false,
       lg: true
     }).getValue(this.breakPoint))
+    .barHeight(new BreakPointType({
+      xs: 50,
+      sm: 50,
+      md: 50,
+      lg: 220
+    }).getValue(this.breakPoint))
+    .animationDuration(new BreakPointType({
+      xs: 300,
+      sm: 300,
+      md: 300,
+      lg: 0
+    }).getValue(this.breakPoint))
     .height('100%')
     .width('100%')
   }
