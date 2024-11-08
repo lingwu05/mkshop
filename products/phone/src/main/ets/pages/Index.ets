@@ -8,6 +8,7 @@ import { MineView } from 'mine';
 @Entry
 @Component
 struct Index {
+  @StorageProp(GlobalVariable.SAFE_AREA_BOTTOM) bottomHeight: number = 0
   @State activeIndex: number = 0
   @StorageProp(GlobalVariable.BREAK_POINT_KEY) breakPoint: string = ''
   tabList: TabItem[] = [
@@ -80,5 +81,6 @@ struct Index {
     }).getValue(this.breakPoint))
     .height('100%')
     .width('100%')
+    .padding({bottom: this.bottomHeight})
   }
 }

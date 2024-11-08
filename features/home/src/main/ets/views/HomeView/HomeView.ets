@@ -4,6 +4,7 @@ import { GlobalVariable } from "basic/src/main/ets/constants/GlobalVariable"
 import { HomeHttpApi } from "../../api/Index"
 import { BannerItem, CategoryItem, DiscountBuilderParam, GoodsItem, RecomGoodsItem,
   RecomQueryParam } from "../../models/Index"
+import { promptAction } from "@kit.ArkUI"
 
 @Component
 export struct HomeView {
@@ -17,18 +18,35 @@ export struct HomeView {
   @State freshGoodsList: GoodsItem[] = [] // 新鲜好物商品列表
   @State recomGoodsList: RecomGoodsItem[] = [] // 推荐商品列表
 
+  @State page: number = 1
+  @State hasNextPage: boolean = true
+  @State isReachLoad: boolean = false
   @State searchOpacity: number = 0
   @State yOffset: number = 0
   @State isLoading: boolean = false
   scroller: Scroller = new Scroller()
 
   aboutToAppear(): void {
+    this.isLoading = true
     this.getHomeData()
+    this.getRecomData()
+    this.isLoading = false
+  }
+
+  // 获取推荐商品的数据
+  async getRecomData() {
+    const result = await HomeHttpApi.getRecomData({limit: this.page * 8} as RecomQueryParam)
+    if (result.length || result.length == this.page * 8) {
+      ++this.page
+    } else {
+      this.hasNextPage = false
+      promptAction.showToast({message: '没有下一页了'})
+    }
+    this.recomGoodsList = result
   }
 
   // 获取数据
   async getHomeData() {
-    this.isLoading = true
     const result = await Promise.allSettled([
       HomeHttpApi.getBannerData(),
       HomeHttpApi.getCategoryData(),
@@ -36,7 +54,7 @@ export struct HomeView {
       HomeHttpApi.getHotData(),
       HomeHttpApi.getOneData(),
       HomeHttpApi.getFreshData(),
-      HomeHttpApi.getRecomData({limit: 20} as RecomQueryParam)
+      this.getRecomData()
     ])
     if (result[0].status === "fulfilled") {
       this.bannerList = result[0].value
@@ -56,10 +74,6 @@ export struct HomeView {
     if (result[5].status === "fulfilled") {
       this.freshGoodsList = result[5].value
     }
-    if (result[6].status === "fulfilled") {
-      this.recomGoodsList = result[6].value
-    }
-    this.isLoading = false
   }
 
   @Builder discountBuilder(param: DiscountBuilderParam) {
@@ -442,6 +456,15 @@ export struct HomeView {
                 bottom: 10,
                 top: 10
               })
+              // .onReachEnd( () => {
+              //   promptAction.showToast({message: '刷新'})
+              //   // 如果还有下一页并且没有加载下一页
+              //   // if (this.hasNextPage && !this.isReachLoad) {
+              //   //   this.isReachLoad = true
+              //   //   await this.getRecomData
+              //   //   this.isReachLoad = false
+              //   // }
+              // })
 
             }
             .width('100%')
@@ -466,6 +489,14 @@ export struct HomeView {
             this.searchOpacity = 1
           } else {
             this.searchOpacity = 0
+          }
+        })
+        .onReachEnd(async () => {
+          // 如果还有下一页并且没有加载下一页
+          if (this.hasNextPage && !this.isReachLoad) {
+            this.isReachLoad = true
+            await this.getRecomData()
+            this.isReachLoad = false
           }
         })
 
