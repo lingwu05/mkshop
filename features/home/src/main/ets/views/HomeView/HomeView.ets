@@ -1,11 +1,10 @@
-import { BreakPointEnum, BreakPointType, HttpRequest } from "basic"
+import { BreakPointEnum, BreakPointType, CategoryItem, GoodsItem, HttpRequest, RecomGoodsItem,
+  RecomQueryParam } from "basic"
 import { SearchBox, LoadingText, Loading } from "basic/src/main/ets/components/Index"
 import { GlobalVariable } from "basic/src/main/ets/constants/GlobalVariable"
 import { HomeHttpApi } from "../../api/Index"
-import { BannerItem, CategoryItem, DiscountBuilderParam, GoodsItem,
-  ListDataSource,
-  RecomGoodsItem,
-  RecomQueryParam } from "../../models/Index"
+import { BannerItem,  DiscountBuilderParam,
+  ListDataSource, } from "../../models/Index"
 import { promptAction } from "@kit.ArkUI"
 
 @Component

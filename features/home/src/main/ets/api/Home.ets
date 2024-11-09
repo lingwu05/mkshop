@@ -1,5 +1,5 @@
-import { HttpRequest } from 'basic'
-import { BannerItem, CategoryItem, GoodsItem, HotGoods, RecomGoodsItem, } from '../models/Index'
+import { CategoryItem, GoodsItem, HttpRequest, RecomGoodsItem } from 'basic'
+import { BannerItem, HotGoods} from '../models/Index'
 
 export class HomeHttpApi {
   // 获取轮播图数据

@@ -1,34 +1,10 @@
+import { GoodsItem } from "basic"
+
 export interface BannerItem {
   imgUrl: string
   hrefUrl: string
   id: string
   type: string
-}
-
-// 分类目录
-export interface CategoryChildrenItem {
-  id: string
-  name: string
-  picture: string
-  children: null
-  goods: null
-}
-
-export interface CategoryItem {
-  id: string
-  name: string
-  picture: string
-  children: CategoryChildrenItem[]
-  goods: GoodsItem[]
-}
-
-export interface GoodsItem {
-  id: string
-  name: string
-  picture: string
-  desc: string
-  price: string
-  orderNum: number
 }
 
 export interface SimpleGoodsItem {
@@ -58,18 +34,7 @@ export interface HotGoods {
   subTypes: HotGoodsItem[]
 }
 
-// 推荐卡片商品 响应数据
-export interface RecomGoodsItem {
-  id: string
-  name: string
-  price: string
-  picture: string
-  payCount: number
-}
 
-export interface RecomQueryParam {
-  limit: number
-}
 
 export interface DiscountBuilderParam {
   mainTitle: string
