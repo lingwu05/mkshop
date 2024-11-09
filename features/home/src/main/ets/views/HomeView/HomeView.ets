@@ -1,7 +1,7 @@
 import { BreakPointEnum, BreakPointType, CategoryItem, GoodsItem, HttpRequest, RecomGoodsItem,
   RecomQueryParam } from "basic"
 import { SearchBox, LoadingText, Loading } from "basic/src/main/ets/components/Index"
-import { GlobalVariable } from "basic/src/main/ets/constants/GlobalVariable"
+import { BusinessVariable, GlobalVariable } from "basic/src/main/ets/constants/GlobalVariable"
 import { HomeHttpApi } from "../../api/Index"
 import { BannerItem,  DiscountBuilderParam,
   ListDataSource, } from "../../models/Index"
@@ -63,6 +63,7 @@ export struct HomeView {
     }
     if (result[1].status === "fulfilled") {
       this.categoryList = result[1].value
+      AppStorage.setOrCreate(BusinessVariable.CATEGORY_DATA, this.categoryList)
     }
     if (result[2].status === "fulfilled") {
       this.saleGoodsList = result[2].value.subTypes[0]?.goodsItems?.items
