@@ -1,4 +1,4 @@
-import { CategoryChildrenItem, CategoryItem, TitleNavBar } from "basic"
+import { BreakPointType, CategoryChildrenItem, CategoryItem, TitleNavBar } from "basic"
 import { BusinessVariable, GlobalVariable } from "basic/src/main/ets/constants/GlobalVariable"
 import text from "@ohos.graphics.text"
 
@@ -47,7 +47,11 @@ export struct CategoryView {
               .borderRadius(8)
               .margin({ bottom: 8 })
 
-            GridRow({columns: 2, gutter: 8}) {
+            GridRow({columns: {
+              sm: 2,
+              md: 3,
+              lg: 4
+            }, gutter: 8}) {
               ForEach(this.catagoryList[this.activeIndex]?.children || [], (item: CategoryChildrenItem) => {
                 GridCol() {
                   Column() {
