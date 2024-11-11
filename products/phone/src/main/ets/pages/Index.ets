@@ -11,6 +11,7 @@ struct Index {
   @StorageProp(GlobalVariable.SAFE_AREA_BOTTOM) bottomHeight: number = 0
   @State activeIndex: number = 0
   @StorageProp(GlobalVariable.BREAK_POINT_KEY) breakPoint: string = ''
+  @Provide pageStack: NavPathStack = new NavPathStack() // 声明路由栈对象
   tabList: TabItem[] = [
     { text: '首页', normal: $r('app.media.ic_public_home_normal'), active: $r('app.media.ic_public_home_active') },
     { text: '分类', normal: $r('app.media.ic_public_pro_normal'), active: $r('app.media.ic_public_pro_active') },
@@ -37,50 +38,53 @@ struct Index {
   }
 
   build() {
-    Tabs({barPosition: new BreakPointType({
-      xs: BarPosition.End,
-      sm: BarPosition.End,
-      md: BarPosition.End,
-      lg: BarPosition.Start
-    }).getValue(this.breakPoint)}) {
-      ForEach(this.tabList, (item:TabItem, index) => {
-        TabContent() {
-          if (index === 0) {
-            HomeView()
-          } else if (index === 1) {
-            CategoryView()
-          } else if (index === 2) {
-            CartView()
-          } else {
-            MineView()
+    Navigation(this.pageStack) {
+      Tabs({barPosition: new BreakPointType({
+        xs: BarPosition.End,
+        sm: BarPosition.End,
+        md: BarPosition.End,
+        lg: BarPosition.Start
+      }).getValue(this.breakPoint)}) {
+        ForEach(this.tabList, (item:TabItem, index) => {
+          TabContent() {
+            if (index === 0) {
+              HomeView()
+            } else if (index === 1) {
+              CategoryView()
+            } else if (index === 2) {
+              CartView()
+            } else {
+              MineView()
+            }
           }
-        }
-        .tabBar(this.tabBarBuilder(item, index))
+          .tabBar(this.tabBarBuilder(item, index))
+        })
+      }
+      .onTabBarClick((index) => {
+        this.activeIndex = index
       })
+      .vertical(new BreakPointType({
+        xs: false,
+        sm: false,
+        md: false,
+        lg: true
+      }).getValue(this.breakPoint))
+      .barHeight(new BreakPointType({
+        xs: 50,
+        sm: 50,
+        md: 50,
+        lg: 220
+      }).getValue(this.breakPoint))
+      .animationDuration(new BreakPointType({
+        xs: 300,
+        sm: 300,
+        md: 300,
+        lg: 0
+      }).getValue(this.breakPoint))
+      .height('100%')
+      .width('100%')
+      .padding({bottom: this.bottomHeight})
     }
-    .onTabBarClick((index) => {
-      this.activeIndex = index
-    })
-    .vertical(new BreakPointType({
-      xs: false,
-      sm: false,
-      md: false,
-      lg: true
-    }).getValue(this.breakPoint))
-    .barHeight(new BreakPointType({
-      xs: 50,
-      sm: 50,
-      md: 50,
-      lg: 220
-    }).getValue(this.breakPoint))
-    .animationDuration(new BreakPointType({
-      xs: 300,
-      sm: 300,
-      md: 300,
-      lg: 0
-    }).getValue(this.breakPoint))
-    .height('100%')
-    .width('100%')
-    .padding({bottom: this.bottomHeight})
+    .hideTitleBar(true)
   }
 }
