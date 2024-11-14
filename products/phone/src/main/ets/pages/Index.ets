@@ -12,7 +12,7 @@ struct Index {
   @StorageProp(GlobalVariable.SAFE_AREA_BOTTOM) bottomHeight: number = 0
   @State activeIndex: number = 0
   @StorageProp(GlobalVariable.BREAK_POINT_KEY) breakPoint: string = ''
-  @State pageStack: NavPathStack = new NavPathStack() // 声明路由栈对象
+  @Provide pageStack: NavPathStack = new NavPathStack() // 声明路由栈对象
   tabList: TabItem[] = [
     { text: '首页', normal: $r('app.media.ic_public_home_normal'), active: $r('app.media.ic_public_home_active') },
     { text: '分类', normal: $r('app.media.ic_public_pro_normal'), active: $r('app.media.ic_public_pro_active') },
@@ -49,7 +49,7 @@ struct Index {
         ForEach(this.tabList, (item:TabItem, index) => {
           TabContent() {
             if (index === 0) {
-              HomeView({pageStack: this.pageStack})
+              HomeView()
             } else if (index === 1) {
               CategoryView()
             } else if (index === 2) {

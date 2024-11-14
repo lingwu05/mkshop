@@ -1,7 +1,7 @@
 import { BreakPointEnum, BreakPointType, CategoryItem, GoodsItem, HttpRequest, RecomGoodsItem,
   RecomQueryParam } from "basic"
 import { SearchBox, LoadingText, Loading } from "basic/src/main/ets/components/Index"
-import { BusinessVariable, GlobalVariable } from "basic/src/main/ets/constants/GlobalVariable"
+import { BusinessVariable, GlobalVariable, PagePath } from "basic/src/main/ets/constants/GlobalVariable"
 import { HomeHttpApi } from "../../api/Index"
 import { BannerItem,  DiscountBuilderParam,
   ListDataSource, } from "../../models/Index"
@@ -33,14 +33,13 @@ export struct HomeView {
   @State isLoading: boolean = false
   scroller: Scroller = new Scroller()
 
-  @Prop pageStack: NavPathStack = new NavPathStack();
+  @Consume pageStack: NavPathStack;
 
   async aboutToAppear() {
     this.isLoading = true
     await this.getHomeData()
     await this.getRecomData()
     this.isLoading = false
-    console.log('aboutToAppear');
   }
 
   // 获取推荐商品的数据
@@ -532,8 +531,7 @@ export struct HomeView {
               colors: [["#ffdebfee", 0], [$r("[basic].color.white"), 1]]
             })
             .onClick(() => {
-              promptAction.showToast({message: JSON.stringify(this.pageStack)})
-              // this.pageStack.pushPathByName("SearchPage", null, false)
+              this.pageStack.pushPathByName(PagePath.SEARCH_VIEW, null)
             })
 
           // 点击置顶小火箭

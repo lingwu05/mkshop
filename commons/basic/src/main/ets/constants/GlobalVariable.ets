@@ -9,3 +9,8 @@ export class GlobalVariable {
 export class BusinessVariable {
   static readonly CATEGORY_DATA: string = "category" // 成功标识
 }
+
+export class PagePath {
+  static readonly SEARCH_VIEW: string = 'SearchPage' // 搜索首页
+  static readonly SEARCH_RESULT: string = 'SearchResultPage' // 搜索结果页
+}

@@ -9,6 +9,14 @@
       }
     },
     {
+      "name": "SearchResultPage",
+      "pageSourceFile": "src/main/ets/views/SearchView/SearchResult.ets",
+      "buildFunction": "PageSearchResultBuilder",
+      "data": {
+        "description" : "this is SearchResultPage"
+      }
+    },
+    {
       "name": "HomePage",
       "pageSourceFile": "src/main/ets/views/HomeView/HomeView.ets",
       "buildFunction": "PageHomeBuilder",

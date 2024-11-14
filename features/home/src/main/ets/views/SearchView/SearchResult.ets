@@ -1,17 +1,20 @@
-import { GlobalVariable, PagePath } from 'basic/src/main/ets/constants/Index'
-import { promptAction } from '@kit.ArkUI';
+import { GlobalVariable, PagePath } from 'basic/src/main/ets/constants/GlobalVariable'
+import { PathShape, promptAction } from '@kit.ArkUI'
 
-// 跳转页面入口函数
 @Builder
-export function PageSearchBuilder() {
-  SearchView()
+function PageSearchResultBuilder() {
+  SearchResult()
 }
 
 @Component
-struct SearchView {
+struct SearchResult {
   @StorageProp(GlobalVariable.SAFE_AREA_TOP) topHeight: number = 0
   @State value: string = ''
-  pageStack : NavPathStack = new NavPathStack()
+  pageStack: NavPathStack = new NavPathStack()
+
+  aboutToAppear(): void {
+
+  }
 
   build() {
     NavDestination() {
@@ -21,20 +24,16 @@ struct SearchView {
             .width(24)
             .aspectRatio(1)
             .onClick(() => {
-              this.pageStack.pop() // 返回上一页
+              this.pageStack.clear() // 返回首页
               return true
             })
           Search({value: this.value, placeholder: '商品关键字'})
-            .searchButton('搜索')
             .height(40)
             .layoutWeight(1)
             .onChange((value: string) => {
               this.value = value
             })
             .defaultFocus(true)
-            .onSubmit(() => {
-              this.pageStack.pushPathByName(PagePath.SEARCH_RESULT, this.value)
-            })
         }
         .width('100%')
         .height(56 + this.topHeight)
@@ -47,11 +46,12 @@ struct SearchView {
       .width('100%')
       .height('100%')
     }
-    .onReady((data) => {
-      this.pageStack = data.pathStack
-    })
     .width('100%')
     .height('100%')
+    .onReady((data) => {
+      this.pageStack = data.pathStack
+      this.value = (this.pageStack.getParamByName(PagePath.SEARCH_RESULT) as string[])[0]
+    })
     .hideTitleBar(true)
   }
 }
