@@ -7,6 +7,14 @@
       "data": {
         "description" : "this is SearchPage"
       }
+    },
+    {
+      "name": "HomePage",
+      "pageSourceFile": "src/main/ets/views/HomeView/HomeView.ets",
+      "buildFunction": "PageHomeBuilder",
+      "data": {
+        "description" : "this is HomePage"
+      }
     }
   ]
 }

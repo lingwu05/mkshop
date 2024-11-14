@@ -11,7 +11,8 @@ export function PageSearchBuilder() {
 struct SearchView {
   @StorageProp(GlobalVariable.SAFE_AREA_TOP) topHeight: number = 0
   @State value: string = ''
-  @Consume pageStack : NavPathStack;
+  pageStack : NavPathStack = new NavPathStack()
+
   build() {
     NavDestination() {
       Column() {
@@ -43,6 +44,9 @@ struct SearchView {
       .width('100%')
       .height('100%')
     }
+    .onReady((data) => {
+      this.pageStack = data.pathStack
+    })
     .width('100%')
     .height('100%')
     .hideTitleBar(true)

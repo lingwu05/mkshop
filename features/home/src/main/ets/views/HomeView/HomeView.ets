@@ -33,13 +33,14 @@ export struct HomeView {
   @State isLoading: boolean = false
   scroller: Scroller = new Scroller()
 
-  @Consume pageStack: NavPathStack;
+  @Prop pageStack: NavPathStack = new NavPathStack();
 
   async aboutToAppear() {
     this.isLoading = true
     await this.getHomeData()
     await this.getRecomData()
     this.isLoading = false
+    console.log('aboutToAppear');
   }
 
   // 获取推荐商品的数据
@@ -206,10 +207,10 @@ export struct HomeView {
   }
 
   build() {
-    if (this.isLoading) {
+    NavDestination() {
+      if (this.isLoading) {
       LoadingText()
-    } else {
-      Navigation(this.pageStack) {
+      } else {
         RelativeContainer() {
           Refresh({refreshing: $$this.isRefreshing, builder: this.refreshStyleBuilder()}) {
             Scroll(this.scroller) {
@@ -531,7 +532,8 @@ export struct HomeView {
               colors: [["#ffdebfee", 0], [$r("[basic].color.white"), 1]]
             })
             .onClick(() => {
-              this.pageStack.pushPathByName("SearchPage", null, false)
+              promptAction.showToast({message: JSON.stringify(this.pageStack)})
+              // this.pageStack.pushPathByName("SearchPage", null, false)
             })
 
           // 点击置顶小火箭
@@ -566,5 +568,10 @@ export struct HomeView {
         .height('100%')
       }
     }
+    .onReady((data) => {
+      // this.pageStack = data.pathStack
+      console.log('ready');
+    })
+
   }
 }

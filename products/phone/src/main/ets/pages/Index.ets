@@ -4,6 +4,7 @@ import { CartView } from 'cart';
 import { CategoryView } from 'category';
 import { HomeView } from 'home';
 import { MineView } from 'mine';
+import { promptAction } from '@kit.ArkUI';
 
 @Entry
 @Component
@@ -11,7 +12,7 @@ struct Index {
   @StorageProp(GlobalVariable.SAFE_AREA_BOTTOM) bottomHeight: number = 0
   @State activeIndex: number = 0
   @StorageProp(GlobalVariable.BREAK_POINT_KEY) breakPoint: string = ''
-  @Provide pageStack: NavPathStack = new NavPathStack() // 声明路由栈对象
+  @State pageStack: NavPathStack = new NavPathStack() // 声明路由栈对象
   tabList: TabItem[] = [
     { text: '首页', normal: $r('app.media.ic_public_home_normal'), active: $r('app.media.ic_public_home_active') },
     { text: '分类', normal: $r('app.media.ic_public_pro_normal'), active: $r('app.media.ic_public_pro_active') },
@@ -48,7 +49,7 @@ struct Index {
         ForEach(this.tabList, (item:TabItem, index) => {
           TabContent() {
             if (index === 0) {
-              HomeView()
+              HomeView({pageStack: this.pageStack})
             } else if (index === 1) {
               CategoryView()
             } else if (index === 2) {
@@ -58,10 +59,13 @@ struct Index {
             }
           }
           .tabBar(this.tabBarBuilder(item, index))
+          .width('100%')
+          .height('100%')
         })
       }
       .onTabBarClick((index) => {
         this.activeIndex = index
+        promptAction.showToast({message: this.breakPoint})
       })
       .vertical(new BreakPointType({
         xs: false,
@@ -85,6 +89,9 @@ struct Index {
       .width('100%')
       .padding({bottom: this.bottomHeight})
     }
+    .mode(NavigationMode.Stack)
+    .width('100%')
+    .height('100%')
     .hideTitleBar(true)
   }
 }
